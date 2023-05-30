@@ -1,27 +1,29 @@
-
 export default {
   state: {
-    userInfo: {},
+    userInfo: {
+      info: {},
+      accountType: [],
+    },
   },
   mutations: {
-    addUser : (state, userDetails) =>  state.userInfo = userDetails,
-    addAccountType: (state, payload)=>{
-      return state.userDetails["accountType"] = payload
-    }
+    addUser: (state, userDetails) =>
+      (state.userInfo.info = userDetails),
+    addAccountType: (state, payload) => {
+      return (state.userInfo.accountType = [
+        ...state.userInfo.accountType,
+        payload,
+      ]);
+    },
   },
   getters: {
-    getUserInfo : (state) => state.userInfo
+    getUserInfo: (state) => state.userInfo,
   },
   actions: {
     addUser({ commit }, userDetails) {
-      commit("addUser",userDetails );
+      commit("addUser", userDetails);
     },
-    addUserAccountType({commit},payload){
-      commit("addAccountType",payload );
-
+    addUserAccountType({ commit }, payload) {
+      commit("addAccountType", payload);
     },
-    // addUserDetails() {
-    //   localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
-    // },
   },
 };

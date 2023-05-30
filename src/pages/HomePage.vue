@@ -24,6 +24,7 @@
         placeholder="Enter your email"
         type="text"
         v-model="userDetails.email"
+        required
       />
       <label for="password">Password</label>
       <input
@@ -33,12 +34,13 @@
         type="text"
         v-model="userDetails.password"
         @input="validatePassword"
+        required
       />
       <div class="flex gap-2">
         <span
           v-for="item in indicators"
           :key="item.id"
-          :class="item[passwordStatus]"
+          :class="item[passwordStatus] || item.default"
           class="py-1 px-5 transition duration-700 ease-in-out"
         >
         </span>
@@ -52,7 +54,7 @@
           alt=""
           class="h-6 w-6"
         />
-        <span class="ransition duration-700 ease-in-out">
+        <span class="transition duration-700 ease-in-out">
           {{
             passwordText
               ? passwordText
@@ -104,6 +106,9 @@ export default {
       this.addUser(this.userDetails);
     },
     validatePassword() {
+      if (!this.userDetails.password) {
+        return (this.passwordStatus = ""), (this.passwordText = "");
+      }
       if (this.userDetails.password.length < 8) {
         return (
           (this.passwordStatus = "weak"),
@@ -142,11 +147,15 @@ export default {
       e.preventDefault();
       this.validateEmail();
 
-      if (this.isValidEmail) {
+      if (
+        this.isValidEmail &&
+        this.passwordStatus &&
+        this.passwordStatus !== "weak"
+      ) {
         this.addUserDetails();
         this.$router.push({ name: "step2" });
       } else {
-        console.log("Email not valid");
+        throw Error("Invalid form fields");
       }
     },
   },
