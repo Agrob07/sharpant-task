@@ -1,5 +1,5 @@
 {
-  "name": "quez-on-vue",
+  "name": "test",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,7 @@
     "lodash": "^4.17.21",
     "vue": "^2.7.13",
     "vue-router": "^3.5.0",
+    "vue2-toast": "^2.1.0",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

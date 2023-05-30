@@ -1,64 +1,94 @@
 <template>
   <div
-    class="h-full flex flex-col justify-center gap-10 items-center bg-gradient-to-r from-cyan-500 to-blue-500"
   >
-    <img
-      src="https://tuk-cdn.s3.amazonaws.com/can-uploader/header-3-svg5.svg"
-      alt="circle"
-    />
-    <h1 class="font-normal text-4xl leading-6 text-indigo-800">
-      Quiz for users
-    </h1>
-    <form class="flex flex-col gap-10" @submit="handleSubmit">
-      <input
-        class="pr-24 text-gray-600 bg-gray-100 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-12 px-10 py-4 text-sm border-gray-300 rounded border"
-        placeholder="Please enter email"
+ <form class="flex flex-col gap-10" @submit="handleSubmit">
+  <label for="first-name">First name </label>   
+  <input
+      id ="first-name"
+        class="pr-24 text-gray-600 bg-gray-100 focus:outline-none focus:border
+         focus:border-indigo-700 font-normal w-full h-12 px-10 py-4 text-sm 
+         border-gray-300 rounded border"
+        placeholder="Enter your first name"
         type="text"
-        v-model="inputValue"
+        v-model="userDetails.firstName"
+      />
+      <label for="first-name">Last name </label>   
+      <input
+      id="last-name"
+        class="pr-24 text-gray-600 bg-gray-100 focus:outline-none focus:border
+         focus:border-indigo-700 font-normal w-full h-12 px-10 py-4 text-sm 
+         border-gray-300 rounded border"
+        placeholder="Enter your last name"
+        type="text"
+        v-model="userDetails.lastName"
+      />
+      <label for="email">Email</label>   
+      <input
+      id="email"
+        class="pr-24 text-gray-600 bg-gray-100 focus:outline-none focus:border
+         focus:border-indigo-700 font-normal w-full h-12 px-10 py-4 text-sm 
+         border-gray-300 rounded border"
+        placeholder="Enter your email"
+        type="text"
+        v-model="userDetails.email"
+      />
+      <label for="password">Password</label>   
+      <input
+      id="password"
+        class="pr-24 text-gray-600 bg-gray-100 focus:outline-none focus:border
+         focus:border-indigo-700 font-normal w-full h-12 px-10 py-4 text-sm 
+         border-gray-300 rounded border"
+        placeholder="Create a password"
+        type="text"
+        v-model="userDetails.password"
       />
       <button
-        class="focus:outline-none ml-28 bg-green-900 dark:bg-green-700 border-green-700 hover:bg-green-400 transition duration-150 tex-white-600 dark:text-white-400 ease-in-out hover:border-green-400 hover:green-300 border rounded w-32 py-3 text-m"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         type="submit"
       >
-        Start Quez
-      </button>
+     Next
+    </button>
     </form>
-    <ErrorModal :showModal="showErrorModal" @setShowModal="setShowModal" />
   </div>
 </template>
 
 <script>
-import ErrorModal from "../components/ErrorModal.vue";
+import { mapActions } from 'vuex';
 export default {
-  components: {
-    ErrorModal,
-  },
   data: () => ({
-    inputValue: "",
-    showErrorModal: false,
+   userDetails : {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+   },
+   isValidEmail: false,
   }),
+  computed:{
+  },
   methods: {
-    validateEmail() {
-      if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.inputValue)) {
-        return true;
-      }
-      this.inputValue = "";
-      this.showErrorModal = true;
-      return false;
+    ...mapActions(['addUser']),
+    addUserDetails() {
+      this.addUser( this.userDetails);
     },
-    addEmail() {
-      this.$store.dispatch("addUser", this.inputValue);
+    validateEmail() {
+      if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.userDetails.email)) {
+      return  this.isValidEmail= true;
+      }
+      console.log('error')
+      this.userDetails.email = "";
+        this.isValidEmail=false;
     },
     handleSubmit(e) {
       e.preventDefault();
-      const isValid = this.validateEmail();
-      if (isValid) {
-        this.addEmail();
-        this.$router.push({ path: "/quiz" });
+      this.validateEmail();
+     
+      if (this.isValidEmail) {
+        this.addUserDetails();
+        this.$router.push({ name: "step2" });
+      }else{
+        console.log("Email not valid")
       }
-    },
-    setShowModal(val) {
-      return (this.showErrorModal = val);
     },
   },
 };
