@@ -26,8 +26,13 @@
     </div>
 
     <div class="flex gap-4">
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="backToStep1">Back</button>
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="handleClick">Next</button>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+       @click="backToStep1"
+       >Back</button>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+       @click="handleClick"
+       :disabled = "true"
+       >Next</button>
     </div>
   </div>
 </template>
@@ -48,7 +53,7 @@ export default {
       this.$router.go(-1)
     },
     handleClick(){
-        this.addUserAccountType()
+        this.addUserAccountType(1)
     }
     },
 }
